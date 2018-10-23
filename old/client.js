@@ -15,14 +15,19 @@ const data = {
 Seneca({log: 'test'})
 
   .use('mesh')
-  .act('role:fw,cmd:application',(err, response) => {
-    console.log('This is response X: ',response.x);
-    [1,2,3,4].forEach(i => {
-        Seneca({log: 'test'})
-                .use('mesh')
-                .act(response.x,{value:i,data:serializeArgs(data)}, (err, res) => {
-            console.log(res);
+//   .ready(function(){
+    .act('role:fw,cmd:application',(err, response) => {
+        console.log('This is response X: ',response.x);
+        [1,2,3,4].forEach(i => {
+            Seneca({log: 'test'})
+                    .use('mesh')
+                    .ready(function(){
+                        this.act(response.x,{value:i,data:serializeArgs(data)}, (err, res) => {
+                        console.log(res);
+                        });
+                    })
         });
-    });
-    console.log('Response of application is: ', response);
-})
+        console.log('Response of application is: ', response);
+    })
+//   })
+  
