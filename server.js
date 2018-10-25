@@ -13,7 +13,6 @@ Seneca()
         const s = new Subject();
         
         const arr1 = m.operations.map(o => {
-            console.log('OPERATOR IS ',o.operator);
             const op = require('rxjs/operators')[o.operator];
             return op.apply(op, o.args);                            // filter(i => i%2 === 0)
         });
@@ -28,8 +27,14 @@ Seneca()
             .act(`role:fw,cmd:actorResponse,id:${msg.clientActorid}`,{value:value},(req,resp)=>{
                 console.log("inside actorResponse: ",resp)
             })
-        });
-
+        },
+        (resp)=> {
+            console.log("Error in actorResponse ")
+        },
+        (resp)=> {
+            console.log("Completed  actorResponse ")
+        }
+        );
 
         Seneca().add(`role:fw,cmd:actor,id:${id}`, (msg, response) => {
 
