@@ -7,30 +7,31 @@ Seneca()
     .add('role:fw,cmd:createActor',(msg, response) =>{
         const id = idPlugin();
             
+        const m = deserializeArgs(msg.data);
+        
+        const {Subject} = require('rxjs');
+        const s = new Subject();
+        
+        const arr1 = m.operations.map(o => {
+            console.log('OPERATOR IS ',o.operator);
+            const op = require('rxjs/operators')[o.operator];
+            return op.apply(op, o.args);                            // filter(i => i%2 === 0)
+        });
+        
+        let value= 'odd number';
+        
+        const s2 = s.pipe.apply(s,arr1);
+        s2.subscribe((resp)=> {
+            value = resp;
+            Seneca()
+            .use('mesh')
+            .act(`role:fw,cmd:actorResponse,id:${msg.clientActorid}`,{value:value},(req,resp)=>{
+                console.log("inside actorResponse: ",resp)
+            })
+        });
+
+
         Seneca().add(`role:fw,cmd:actor,id:${id}`, (msg, response) => {
-
-
-            const m = deserializeArgs(msg.data);
-            
-            const {Subject} = require('rxjs');
-            const s = new Subject();
-            
-            const arr1 = m.operations.map(o => {
-                const op = require('rxjs/operators')[o.operator];
-                return op.apply(op, o.args);                            // filter(i => i%2 === 0)
-            });
-            
-            let value= 'odd number';
-            
-            const s2 = s.pipe.apply(s,arr1);
-            s2.subscribe((resp)=> {
-                value = resp;
-                Seneca()
-                .use('mesh')
-                .act(`role:fw,cmd:actorResponse,id:${msg.clientActorid}`,{value:value},(req,resp)=>{
-                    console.log("inside actorResponse: ",resp)
-                })
-            });
 
             if(msg.value.hasOwnProperty('err')){
                 s2.error('error: something went wrong');

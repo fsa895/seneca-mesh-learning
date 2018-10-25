@@ -18,12 +18,12 @@ id = idPlugin();
 
 Seneca({log: 'test'})
   .use('mesh')
-    .act('role:fw,cmd:createActor',(err, response) => {
+    .act('role:fw,cmd:createActor',{data:serializeArgs(data),clientActorid:id},(err, response) => {
         values.forEach(i => {
             Seneca({log: 'test'})
                     .use('mesh')
                     .ready(function(){
-                        this.act(`role:fw,cmd:actor,id:${response.id}`,{value:i,data:serializeArgs(data),clientActorid:id}, (err, res) => {
+                        this.act(`role:fw,cmd:actor,id:${response.id}`,{value:i}, (err, res) => {
                         console.log(res);
                         });
                     })
