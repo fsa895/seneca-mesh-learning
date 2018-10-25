@@ -28,12 +28,12 @@ Seneca()
                 console.log("inside actorResponse: ",resp)
             })
         },
-        (resp)=> {
-            console.log("Error in actorResponse ")
-        },
-        (resp)=> {
-            console.log("Completed  actorResponse ")
-        }
+        (err) => {
+            console.log(err)
+          },
+        (complete) => {
+            console.log(complete)
+          }
         );
 
         Seneca().add(`role:fw,cmd:actor,id:${id}`, (msg, response) => {
