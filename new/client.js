@@ -25,9 +25,11 @@ Seneca({log: 'test'})
                     [1,2,3,4].forEach(i => {
                         Seneca({log:'test'})
                           .use('mesh')
-                          .act(`hello`,{id:res.id,value:i,data:serializeArgs(data)},(err,res) => {
-                                console.log("hello res : ",res);          
-                          })  
+                          .ready(function(){
+                              this.act(`hello`,{id:res.id,value:i,data:serializeArgs(data)},(err,res) => {
+                                    console.log("hello res : ",res);          
+                              })  
+                          })
         });
     });
     console.log('Response of application is: ', response);

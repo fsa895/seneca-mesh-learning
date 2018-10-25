@@ -7,7 +7,8 @@ Seneca()
         const id = idPlugin;
         
         Seneca().add(`role:fw,cmd:createActor `,(msg, response) => {
-
+            console.log('inside create actor');
+            
             Seneca().add(`hello`,{id:msg.id},(msg,response) =>{
                 console.log('hello id:', msg.id)                        
                 console.log('Inside createActor')
@@ -46,6 +47,6 @@ Seneca()
         response({x:`role:fw,cmd:createActor`,id:id})
     })
     .use('mesh', {
-        isbase: true,
+        isbase: false,
         pin: 'role:fw,cmd:application'
       })
